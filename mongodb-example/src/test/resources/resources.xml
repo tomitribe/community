@@ -1,0 +1,5 @@
+<resources>
+    <Resource id="mongoClient" class-name="com.mongodb.MongoClient">
+        host  localhost
+    </Resource>
+</resources>
