@@ -16,6 +16,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
+ * = Apache TomEE and custom Resources 
+ *
  * In this sample we're going to explore how to create a custom resource in +Apache TomEE+ for +MongoDB+ so we can use
  * +@Resource+ annotation as we usually do for +DataSources+. Of course the same approach can be used for any other
  * resource.
