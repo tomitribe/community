@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
  * 
  * Let's create a simple +Stateless Session+ Bean that will deal with +com.mongodb.MongoClient+ connection class.
  * 
- * include::GreetingsSessionBean.java[]
+ * include::src/main/java/org/superbiz/nosql/mongodb/GreetingsSessionBean.java[]
  * 
  * As you can see +@Resource+ annotation is used over +com.mongodb.MongoClient+ class, +Apache TomEE+ will be the
  * responsible of creating and injecting the resource.
@@ -30,7 +30,7 @@ import org.junit.runner.RunWith;
  * Next step is configuring the +MongoDB+ connection. To do it we only need to create a +resources.xml+ file with
  * required parameters.
  * 
- * include::/resources.xml
+ * include::src/test/resources/resources.xml
  * 
  * Note that file is self-explained. +MongoClient+ has a constructor with single parameter where you set the host and in
  * this case this is the constructor that is resolved. You can think about +resources.xml+ file as +Spring+-like file
@@ -42,7 +42,7 @@ import org.junit.runner.RunWith;
  * 
  * First step is creating a deployment file:
  * 
- * include::GreetingsSessionBeanTest#deploy().java[]
+ * include::src/test/java/org/superbiz/nosql/mongodb/GreetingsSessionBeanTest#deploy().java[]
  * 
  * Thanks of +ShrinkWrap+, we can create as many +resources.xml+ files depending on the environments you must deploy the
  * application and add them selectively.
@@ -80,7 +80,7 @@ public class GreetingsSessionBeanTest {
      * A MongoDB server must be started at _localhost_ manually, but it is not required to create any _db_ nor _collection_
      * because they are automatically created by the driver.
      * 
-     * include::GreetingsSessionBeanTest#shouldCreateGreetingsOnMongoDB()[]
+     * include::src/test/java/org/superbiz/nosql/mongodb/GreetingsSessionBeanTest#shouldCreateGreetingsOnMongoDB().java[]
      */
     @Test
     public void shouldCreateGreetingsOnMongoDB() {
