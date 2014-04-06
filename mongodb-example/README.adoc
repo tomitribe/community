@@ -75,7 +75,7 @@ public static WebArchive deploy() {
             .create(WebArchive.class)
             .addClass(Greetings.class)
             .addClass(GreetingsSessionBean.class)
-            .addAsWebInfResource("resources.xml")   // <1> resources.xml is added from classpath to WEB-INF
+            .addAsWebInfResource("resources.xml")   // <1>
             .addAsLibraries(
                     Maven.resolver().loadPomFromFile("pom.xml").resolve("org.mongodb:mongo-java-driver")
                             .withTransitivity().asFile());
@@ -84,6 +84,7 @@ public static WebArchive deploy() {
 
 }
 ----
+<1> resources.xml is added from classpath to WEB-INF
 
 Thanks of +ShrinkWrap+, we can create as many +resources.xml+ files depending on the environments you must deploy the
 application and add them selectively.
@@ -102,12 +103,15 @@ because they are automatically created by the driver.
 @Test
 public void shouldCreateGreetingsOnMongoDB() {
 
-    greetingsSessionBean.removeGreetings();                             // <1> Previous Greetings are removed
+    greetingsSessionBean.removeGreetings();                             // <1>
 
-    greetingsSessionBean.createPerson(new Greetings("Hello World!!"));  // <2> Create a new Greeting
+    greetingsSessionBean.createPerson(new Greetings("Hello World!!"));  // <2>
 
-    List<Greetings> greetings = greetingsSessionBean.getGreetings();    // <3> We assert that the Greeting is inserted
+    List<Greetings> greetings = greetingsSessionBean.getGreetings();    // <3>
     assertThat(greetings, hasItem(new Greetings("Hello World!!")));
 
 }
 ----
+<1> Previous Greetings are removed
+<2> Create a new Greeting
+<3> We assert that the Greeting is inserted
