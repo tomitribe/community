@@ -9,8 +9,8 @@ import javax.persistence.PersistenceContext;
 public class EntityManagerProducer {
 
 
-	@Produces @SeriesEntityManager // <1> An entity manager is produced and will be injected with +@SeriesEntityManager+ qualifier. 
-	@PersistenceContext // <2> Because there is only one persistence unit, there is no need to use +unitName+ attribute.
+    @Produces @SeriesEntityManager // <1> An entity manager is produced and will be injected with +@SeriesEntityManager+ qualifier. 
+    @PersistenceContext // <2> Because there is only one persistence unit, there is no need to use +unitName+ attribute.
     EntityManager em;
     
 }
