@@ -79,6 +79,7 @@
 
     <modules>
         <module>mongodb-example</module>
+        <module>injecting-entitymanager</module>
     </modules>
 
     <profiles>

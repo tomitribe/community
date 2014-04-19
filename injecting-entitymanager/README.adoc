@@ -1,0 +1,130 @@
+= Injecting EntityManager
+
+.Overview
+****
+After reading this example, you'll be able to:
+
+* Understand the advantages of using +@Inject+ instead of +@PersistenceContext+.
+* Use _JPA_ and _Apache TomEE_.
+* Write Persistence tests using _Arquillian_.
+****
+
+Almost all projects you develop with Java EE will contain a persistence layer and probably you will use +JPA+ for dealing with +SQL+ systems.
+
+The main class for using +JPA+ is +EntityManager+. It is the facade class which offers operations to deal with a specific _persistence unit_, it is associated to a _persistence context_ and manage the lifecycle of entity instances.
+
+One way to get an +EntityManager+ is using +@PersistenceContext+.
+
+We are going to use an example of an application that stores information about tv series.
+
+We are going to use +javax.annotation.sql.DataSourceDefinition+ annotation to define the datasource.
+
+[source, java]
+----
+@Singleton
+@Startup
+@javax.annotation.sql.DataSourceDefinitions({
+    @DataSourceDefinition (
+        className="org.hsqldb.jdbcDriver",
+        name="series",
+        user="sa",
+        password="",
+        databaseName="seriesdb",
+        properties = {"connectionAttributes=;create=true"},
+        url = "jdbc:hsqldb:mem:seriesdb"
+    ),
+    @DataSourceDefinition (
+            transactional = false,
+            className="org.hsqldb.jdbcDriver",
+            name="seriesUnmanaged",
+            user="sa",
+            password="",
+            databaseName="seriesdb",
+            properties = {"connectionAttributes=;create=true"},
+            url = "jdbc:hsqldb:mem:seriesdb"
+        )
+    })
+public class DataSourceDefinitions {
+
+}
+----
+
+NOTE: _Apache TomEE_ comes with _HSQLDB_ already installed so you don't have to add it as dependency in your project.
+
+Then let's take a look to the class that is going to use to create a new series using +@PersistenceContext+.
+
+[source, java]
+----
+@Stateless
+public class SeriesWithPersistenceContext {
+
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	public void createSerie(Serie serie) {
+		this.entityManager.persist(serie);
+	}
+	
+}
+----
+
+When there is only one _persistence unit_, +PersistenceContext+ annotation can be used without any parameter.
+But what's happen if some day you add a new _persistence unit_? You will need to use +unitName+ attribute of +PersistenceContext+ annotation to set _persistence unit_ name to the +EntityManager+.
+And this is a problem because you will need to modify all places where +PersistenceContext+ is used and set unit name.
+
+To avoid this problem and implement a clean way to get an +EntityManager+, let's use +CDI+.
+
+First thing we are going to create a qualifier annotation to add sense to the +EntityManager+ that is going to be injected, so you know exactly which _persistence unit_ is being used.
+
+[source, java]
+----
+@Target(value = {ElementType.FIELD, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier // <1>
+public @interface SeriesEntityManager {
+
+}
+----
+<1> A qualifier must be annotated with +Qualifier+ annotation.
+
+And then a producer class. This class will produce all _entity managers_ required by the application, in this case only one.
+
+[source, java]
+----
+@ApplicationScoped
+public class EntityManagerProducer {
+
+
+	@Produces @SeriesEntityManager // <1>
+	@PersistenceContext // <2>
+    EntityManager em;
+    
+}
+----
+<1> An entity manager is produced and will be injected with +@SeriesEntityManager+ qualifier.
+<2> Because there is only one persistence unit, there is no need to use +unitName+ attribute.
+
+And finally we can inject an _entity manager_ as any normal bean.
+
+[source, java]
+----
+@Stateless
+public class SeriesWithInjection {
+
+	@Inject              // <1>
+	@SeriesEntityManager // <2>
+	private EntityManager entityManager;
+	
+	public void createSerie(Serie serie) {
+		this.entityManager.persist(serie);
+	}
+	
+}
+----
+<1> +@PersistenceContext+ is not required anymore. +@Inject+ can be used without any problem.
+<2> We add some semantic meaning to the injection and also helps to distinguish in case of different _persistence units_.
+
+Notice that now if a new _persistence unit_ is added you only have to modify the +EntityManagerProducer+ class by using +unitName+ and the whole application will continue working.
+
+Moreover adding a new _entity manager_ will not conflict the state of current application because _entity manager_ is qualified, so you know exactly every time which one is used.
+
