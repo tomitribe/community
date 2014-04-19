@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>mongodb-example</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <version.mongo.driver>2.11.4</version.mongo.driver>
