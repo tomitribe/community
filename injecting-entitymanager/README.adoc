@@ -95,8 +95,8 @@ And then a producer class. This class will produce all _entity managers_ require
 public class EntityManagerProducer {
 
 
-	@Produces @SeriesEntityManager // <1>
-	@PersistenceContext // <2>
+    @Produces @SeriesEntityManager // <1>
+    @PersistenceContext // <2>
     EntityManager em;
     
 }
