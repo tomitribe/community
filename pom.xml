@@ -13,6 +13,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
 
         <version.tomee>1.6.0</version.tomee>
+        <version.openejb.cxf>4.6.0</version.openejb.cxf>
         <version.junit>4.11</version.junit>
         <version.javaee>6.0-5</version.javaee>
         <version.arquillian>1.1.3.Final</version.arquillian>
@@ -81,6 +82,7 @@
         <module>mongodb-example</module>
         <module>injecting-entitymanager</module>
         <module>injecting-properties</module>
+        <module>consuming-rest</module>
     </modules>
 
     <profiles>
@@ -93,6 +95,18 @@
                 <dependency>
                     <groupId>org.apache.openejb</groupId>
                     <artifactId>arquillian-tomee-embedded</artifactId>
+                    <version>${version.tomee}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.openejb</groupId>
+                    <artifactId>openejb-cxf-rs</artifactId>
+                    <version>${version.openejb.cxf}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.openejb</groupId>
+                    <artifactId>tomee-jaxrs</artifactId>
                     <version>${version.tomee}</version>
                     <scope>test</scope>
                 </dependency>
