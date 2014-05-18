@@ -8,7 +8,7 @@ public class MongoDbConfigurationFile implements PropertyFileConfig {
 
     @Override
     public String getPropertyFileName() {
-        return "mongodb.properties";
+        return "mongodb.properties"; // <1> This method should return the location and name of the properties file to be loaded.
     }
 
 }
