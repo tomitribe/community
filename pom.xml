@@ -80,6 +80,7 @@
     <modules>
         <module>mongodb-example</module>
         <module>injecting-entitymanager</module>
+        <module>injecting-properties</module>
     </modules>
 
     <profiles>
