@@ -44,7 +44,11 @@ import org.junit.runner.RunWith;
  * 
  * The mechanism used by _DeltaSpike_ allows developers for dynamic configuration in case of JAR drop-in.
  * 
- * The first thing to do is define our service to return the configuration file classpath location. And this is done by implementing an SPI interface called +PropertyFileConfig+. 
+ * The first thing is add _DeltaSpike_ dependencies:
+ * 
+ * include::pom.xml[project/dependencies/dependency/groupId[text()="org.apache.deltaspike.core"]]
+ * 
+ * Then we define our service to return the location of configuration file based on classpath. And this is done by implementing an SPI interface called +PropertyFileConfig+. 
  * 
  * include::src/main/java/org/superbiz/cdi/properties/MongoDbConfigurationFile.java[]
  * 
