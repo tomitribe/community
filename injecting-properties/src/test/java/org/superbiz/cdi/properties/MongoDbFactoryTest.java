@@ -1,11 +1,10 @@
 package org.superbiz.cdi.properties;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import javax.inject.Inject;
 
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.deltaspike.core.api.config.PropertyFileConfig;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OverProtocol;
@@ -25,34 +24,34 @@ import org.junit.runner.RunWith;
  * ****
  * After reading this example, you'll be able to:
  * 
- * * How to inject values from properties file into simple POJO using _DeltaSpike_.
- * * How to use _MongoDB_ inside _Java EE_ application.
+ * * Inject values from properties file into simple POJO using _DeltaSpike_.
+ * * Use _MongoDB java driver_ inside _Java EE_ application.
  * * Write tests using _Arquillian_. 
  * ****
  * 
  * One of the great improvement in _Java EE 5_ and beyond it is the introduction of _CDI_ (Context and Dependency Injection).
- * _CDI_ is used for injecting dependencies among a lot of other things like events, interceptors, ... and can be used in simple _POJOs_.
+ * _CDI_ is used for injecting dependencies among a lot of other things like events, interceptors, ... and can be used in _POJOs_.
  *   
- * In some cases instead of injecting other objects you want to inject a value from a properties file. 
+ * In some cases instead of injecting other objects (as a dependency injection), you want to inject a value from a properties file into a class that needs to be configured externally. 
  * 
- * In current example we are going to explore how to configure a _MongoDB_ client setting required parameters, that is _host_ and _port_ from a properties file called +mongodb.properties+.
+ * In current example you are going to explore how to configure a _MongoDB_ client, setting required parameters, that is _host_ and _port_, from a properties file called +mongodb.properties+.
  * 
  * The easiest way to do is using _DeltaSpike_ project.
  * 
- * _DeltaSpike_ consist of a number of portable _CDI_ extensions that provide useful features for Java application developers. 
- * And in this case we are going to use one core feature which can be used as configuration mechanism.     
+ * _DeltaSpike_ consists on a number of portable _CDI_ extensions that provide useful features for Java application developers. 
+ * And in this case a core feature which is the configuration mechanism is going to be used.     
  * 
  * The mechanism used by _DeltaSpike_ allows developers for dynamic configuration in case of JAR drop-in.
  * 
  * The first thing is add _DeltaSpike_ dependencies:
  * 
- * include::pom.xml[project/dependencies/dependency/groupId[text()="org.apache.deltaspike.core"]]
+ * include::pom.xml[xmlns:mvn=http://maven.apache.org/POM/4.0.0 /mvn:project/mvn:dependencies/mvn:dependency[mvn:groupId[contains(., 'org.apache.deltaspike.core')]]]
  * 
- * Then we define our service to return the location of configuration file based on classpath. And this is done by implementing an SPI interface called +PropertyFileConfig+. 
+ * Then you define our service to return the location of configuration file based on classpath. And this is done by implementing an SPI interface called +PropertyFileConfig+. 
  * 
  * include::src/main/java/org/superbiz/cdi/properties/MongoDbConfigurationFile.java[]
  * 
- * Next step is to register this class as a service. To do this a file called +org.apache.deltaspike.core.api.config.PropertyFileConfig+ inside +META-INF/services+ with next content:
+ * Next step is to register this class as a service. To do this, a file called +org.apache.deltaspike.core.api.config.PropertyFileConfig+ inside +META-INF/services+ is created:
  * 
  * .META-INF/services/org.apache.deltaspike.core.api.config.PropertyFileConfig
  * [source]
@@ -61,7 +60,7 @@ import org.junit.runner.RunWith;
  * ----
  * 
  * And that's all, now you can use +ConfigProperty+ annotation with +@Inject+ in your _POJOs_ and _CDI_ container will inject values configured within properties file.
- * In our case a file called _mongodb.properties_ located on root classpath.
+ * In your case a file called _mongodb.properties_ located on root classpath.
  * 
  * Let's see an example of +mongodb.properties+ file.
  * 
@@ -72,11 +71,23 @@ import org.junit.runner.RunWith;
  * port = 27017
  * ----
  * 
- * And then our _POJO_ may look like:
+ * And then your _POJO_ may look like:
  * 
  * include::src/main/java/org/superbiz/cdi/properties/MongoDbFactory.java[]
  * 
  * To test it an _Arquillian_ test is going to be used. For this case,  +JavaArchive+ must contain not only our code but also the _DeltaSpike_ library.
+ * 
+ * include::src/test/java/org/superbiz/cdi/properties/MongoDbFactoryTest.java[]
+ * 
+ * '''
+ * 
+ * Injecting values from external file using _Delta Spike_ it is easy, but it has the drawback of having to add _Delta Spike_ as dependency. Probably this will be fixed in next version of _CDI_ spec.
+ * 
+ * If you are using +EJBs+ you can use +ejb-jar.xml+ for that purpose, but this is another history.
+ * 
+ * And you can even create your own +@Resource+ provider in _Apache TomEE_ as explained in https://github.com/tomitribe/community/tree/master/mongodb-example
+ * 
+ * WARNING: Creating your own resource provider will make your application not being portable across application servers.
  * 
  */
 @RunWith(Arquillian.class)

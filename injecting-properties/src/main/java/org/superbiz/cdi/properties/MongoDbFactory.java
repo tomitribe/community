@@ -37,7 +37,7 @@ public class MongoDbFactory {
 
     @Produces
     @RecipesCollection
-    public DBCollection getRecipeCollection() { // <4> This method acts as a producer for _recipies_ _MongoDB_ collections. 
+    public DBCollection getRecipeCollection() { // <4> This method acts as a producer for _recipies MongoDB_ collections. 
         DB db = mongo.getDB("test");
         return db.getCollection("recipes");
     }
