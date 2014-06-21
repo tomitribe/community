@@ -59,18 +59,17 @@ public class MongoDbConfigurationFile implements PropertyFileConfig {
 
 }
 ----
-<1> This method should return the location and name of the properties file to be loaded.
+<1> This method should return the location and name of the properties file to be loaded. 
+Classes implementing PropertyFileConfig will automagically get picked up by _DeltaSpike_ 
+(via +ProcessAnnotatedType+) and will register all +mongodb.properties+ files on the classpath as 
+_DeltaSpike_ +ConfigSource+.
 
-Next step is to register this class as a service. To do this, a file called +org.apache.deltaspike.core.api.config.PropertyFileConfig+ inside +META-INF/services+ is created:
-
-.META-INF/services/org.apache.deltaspike.core.api.config.PropertyFileConfig
-[source]
-----
-org.superbiz.cdi.properties.MongoDbConfigurationFile
-----
 
 And that's all, now you can use +ConfigProperty+ annotation with +@Inject+ in your _POJOs_ and _CDI_ container will inject values configured within properties file.
 In your case a file called _mongodb.properties_ located on root classpath.
+
+For a more detailed explanation please check the _DeltaSpike_ project documentation at http://deltaspike.apache.org/configuration.html
+
 
 Let's see an example of +mongodb.properties+ file.
 
@@ -179,9 +178,8 @@ public class MongoDbFactoryTest {
 }
 ----
 <1> A +JavaArchive+ is created with required classes bundled.
-<2> +PropertyFileConfig+ service is registered in +META-INF/services+ with proper content.
-<3> +mongodb.properties+ is created from +String+ for testing purposes.
-<4> _DeltaSpike_ dependencies are merged inside the +JavaArchive+.
+<2> +mongodb.properties+ is created from +String+ for testing purposes.
+<3> _DeltaSpike_ dependencies are merged inside the +JavaArchive+.
 
 '''
 
