@@ -51,16 +51,10 @@ import org.junit.runner.RunWith;
  * 
  * include::src/main/java/org/superbiz/cdi/properties/MongoDbConfigurationFile.java[]
  * 
- * Next step is to register this class as a service. To do this, a file called +org.apache.deltaspike.core.api.config.PropertyFileConfig+ inside +META-INF/services+ is created:
- * 
- * .META-INF/services/org.apache.deltaspike.core.api.config.PropertyFileConfig
- * [source]
- * ----
- * org.superbiz.cdi.properties.MongoDbConfigurationFile
- * ----
- * 
  * And that's all, now you can use +ConfigProperty+ annotation with +@Inject+ in your _POJOs_ and _CDI_ container will inject values configured within properties file.
  * In your case a file called _mongodb.properties_ located on root classpath.
+ * 
+ * For a more detailed explanation please check the _DeltaSpike_ project documentation at http://deltaspike.apache.org/configuration.html
  * 
  * Let's see an example of +mongodb.properties+ file.
  * 
@@ -102,12 +96,11 @@ public class MongoDbFactoryTest {
         JavaArchive application = ShrinkWrap.create(JavaArchive.class) // <1> A +JavaArchive+ is created with required classes bundled.
                          .addPackage(MongoDbFactory.class.getPackage())
                          .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-                         .addAsServiceProvider(PropertyFileConfig.class, MongoDbConfigurationFile.class) // <2> +PropertyFileConfig+ service is registered in +META-INF/services+ with proper content.
-                         .addAsResource(new StringAsset(MONGODB_PROPERTIES), "mongodb.properties"); // <3> +mongodb.properties+ is created from +String+ for testing purposes.
+                         .addAsResource(new StringAsset(MONGODB_PROPERTIES), "mongodb.properties"); // <2> +mongodb.properties+ is created from +String+ for testing purposes.
         
         application =  merge(application, Maven.resolver().loadPomFromFile("pom.xml")
                                         .resolve("org.apache.deltaspike.core:deltaspike-core-impl")
-                                        .withTransitivity().as(JavaArchive.class)); // <4> _DeltaSpike_ dependencies are merged inside the +JavaArchive+.
+                                        .withTransitivity().as(JavaArchive.class)); // <3> _DeltaSpike_ dependencies are merged inside the +JavaArchive+.
         
         return application;
         

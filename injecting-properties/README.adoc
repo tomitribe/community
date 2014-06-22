@@ -59,17 +59,12 @@ public class MongoDbConfigurationFile implements PropertyFileConfig {
 
 }
 ----
-<1> This method should return the location and name of the properties file to be loaded. 
-Classes implementing PropertyFileConfig will automagically get picked up by _DeltaSpike_ 
-(via +ProcessAnnotatedType+) and will register all +mongodb.properties+ files on the classpath as 
-_DeltaSpike_ +ConfigSource+.
-
+<1> This method should return the location and name of the properties file to be loaded. Classes implementing PropertyFileConfig will automagically get picked up by _DeltaSpike_ (via +ProcessAnnotatedType+) and will register all +mongodb.properties+ files on the classpath as +_DeltaSpike_ +ConfigSource+.
 
 And that's all, now you can use +ConfigProperty+ annotation with +@Inject+ in your _POJOs_ and _CDI_ container will inject values configured within properties file.
 In your case a file called _mongodb.properties_ located on root classpath.
 
 For a more detailed explanation please check the _DeltaSpike_ project documentation at http://deltaspike.apache.org/configuration.html
-
 
 Let's see an example of +mongodb.properties+ file.
 
@@ -144,12 +139,11 @@ public class MongoDbFactoryTest {
         JavaArchive application = ShrinkWrap.create(JavaArchive.class) // <1>
                          .addPackage(MongoDbFactory.class.getPackage())
                          .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-                         .addAsServiceProvider(PropertyFileConfig.class, MongoDbConfigurationFile.class) // <2>
-                         .addAsResource(new StringAsset(MONGODB_PROPERTIES), "mongodb.properties"); // <3>
+                         .addAsResource(new StringAsset(MONGODB_PROPERTIES), "mongodb.properties"); // <2>
         
         application =  merge(application, Maven.resolver().loadPomFromFile("pom.xml")
                                         .resolve("org.apache.deltaspike.core:deltaspike-core-impl")
-                                        .withTransitivity().as(JavaArchive.class)); // <4>
+                                        .withTransitivity().as(JavaArchive.class)); // <3>
         
         return application;
         
